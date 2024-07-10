@@ -16,7 +16,7 @@ const Login = () => {
   };
 
   if (user) {
-    navigate("/");
+    navigate("/parkinglot");
     return null;
   }
 

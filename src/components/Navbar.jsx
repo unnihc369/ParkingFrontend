@@ -26,6 +26,9 @@ const Navbar = () => {
                                 <Link to="/parked" className="hover:text-gray-300 px-3 py-1">
                                     Parked
                                 </Link>
+                                <Link to="/addvehicle" className="hover:text-gray-300 px-3 py-1">
+                                    Add Vehicle
+                                </Link>
                                 <Link to='/user'><span>{user.email}</span></Link>
                                 <button
                                     onClick={handleClick}

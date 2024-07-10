@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, redirect, useNavigate, useParams } from 'react-router-dom';
 
 const ParkingLotDetails = () => {
     const { id } = useParams();
+    const navigate = useNavigate()
     const [parkingLot, setParkingLot] = useState(null);
     const [occupiedSlots, setOccupiedSlots] = useState([]);
     const [userVehicles, setUserVehicles] = useState([]);
@@ -10,6 +11,7 @@ const ParkingLotDetails = () => {
     const [selectedVehicle, setSelectedVehicle] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const userId = JSON.parse(localStorage.getItem('user')).userid;
 
     useEffect(() => {
         const fetchParkingLot = async () => {
@@ -72,6 +74,8 @@ const ParkingLotDetails = () => {
             const data = await response.json();
             if (data.error) throw new Error(data.error);
             setOccupiedSlots([...occupiedSlots, selectedSlot]);
+            navigate("/parkinglot");
+            return null;
         } catch (err) {
             setError(err.message);
         }
@@ -152,6 +156,7 @@ const ParkingLotDetails = () => {
                                 ))}
                         </select>
                     </div>
+                    <Link to='/addvehicle'><h4 className='pb-6'>Add vehicle</h4></Link>
                     <button
                         type="submit"
                         className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded"

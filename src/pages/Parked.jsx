@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const ParkedVehicles = () => {
+    const navigate = useNavigate();
     const [vehicles, setVehicles] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const userId = JSON.parse(localStorage.getItem('user')).userid;
 
     useEffect(() => {
         const fetchParkedVehicles = async () => {

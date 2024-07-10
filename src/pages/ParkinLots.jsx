@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, redirect, useNavigate } from 'react-router-dom';
+import { useAuthContext } from '../hooks/useAuthContext';
 
 const ParkingLots = () => {
+    const navigate = useNavigate();
     const [parkingLots, setParkingLots] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-
+    const user = JSON.parse(localStorage.getItem('user'));
     useEffect(() => {
         const fetchParkingLots = async () => {
             try {

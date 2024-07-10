@@ -8,12 +8,12 @@ import ParkingLotDetails from './pages/ParkingDetail.jsx';
 import ParkedVehicles from './pages/Parked.jsx';
 import Depark from './pages/Depark.jsx';
 import UserProfile from './pages/Profile.jsx';
+import AddVehicle from './pages/AddVehicle.jsx';
 
 const router = createBrowserRouter([
   {
     path: '/',
     element: (
-      // Wrap Home with Navbar
       <div>
         <Navbar />
         <Home />
@@ -83,6 +83,15 @@ const router = createBrowserRouter([
       <div>
         <Navbar />
         <UserProfile />
+      </div>
+    ),
+  },
+  {
+    path: '/addvehicle',
+    element: (
+      <div>
+        <Navbar />
+        <AddVehicle />
       </div>
     ),
   },
