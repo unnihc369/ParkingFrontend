@@ -5,6 +5,9 @@ import Signup from './pages/Signup.jsx';
 import Navbar from './components/Navbar.jsx'; // Import your Navbar component
 import ParkingLots from './pages/ParkinLots.jsx';
 import ParkingLotDetails from './pages/ParkingDetail.jsx';
+import ParkedVehicles from './pages/Parked.jsx';
+import Depark from './pages/Depark.jsx';
+import UserProfile from './pages/Profile.jsx';
 
 const router = createBrowserRouter([
   {
@@ -52,6 +55,34 @@ const router = createBrowserRouter([
       <div>
         <Navbar />
         <ParkingLotDetails />
+      </div>
+    ),
+  },
+  {
+    path: '/parked',
+    element: (
+      // Wrap Home with Navbar
+      <div>
+        <Navbar />
+        <ParkedVehicles />
+      </div>
+    ),
+  },
+  {
+    path: '/parking/depark/:id',
+    element: (
+      <div>
+        <Navbar />
+        <Depark />
+      </div>
+    ),
+  },
+  {
+    path: '/user',
+    element: (
+      <div>
+        <Navbar />
+        <UserProfile />
       </div>
     ),
   },

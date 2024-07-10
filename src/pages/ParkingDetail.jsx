@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { useAuthContext } from '../hooks/useAuthContext';
 
 const ParkingLotDetails = () => {
     const { id } = useParams();
-    const { user } = useAuthContext();
     const [parkingLot, setParkingLot] = useState(null);
     const [occupiedSlots, setOccupiedSlots] = useState([]);
     const [userVehicles, setUserVehicles] = useState([]);
@@ -15,11 +13,14 @@ const ParkingLotDetails = () => {
 
     useEffect(() => {
         const fetchParkingLot = async () => {
+
             try {
                 const response = await fetch(`http://localhost:4000/parkinglot/${id}`);
                 const data = await response.json();
                 setParkingLot(data.parkingLot);
                 setOccupiedSlots(data.occupiedSlots);
+                console.log(data.occupiedSlots);
+
             } catch (err) {
                 setError(err.message);
             } finally {
@@ -27,28 +28,46 @@ const ParkingLotDetails = () => {
             }
         };
 
-        const fetchUserVehicles = async () => {
-            console.log(user);
-            try {
-                const response = await fetch(`http://localhost:4000/vehicle/668d320c25d182e0d5d7c4c7`);
-                const data = await response.json();
-                setUserVehicles(data);
-            } catch (err) {
-                setError(err.message);
-            }
-        };
-
         fetchParkingLot();
-        fetchUserVehicles();
     }, [id]);
+
+    useEffect(() => {
+        if (selectedSlot) {
+            const user = JSON.parse(localStorage.getItem('user'));
+
+            console.log(user.userid)
+            const fetchUserVehicles = async () => {
+                try {
+                    const response = await fetch(`http://localhost:4000/vehicle/${user.userid}`);
+                    const data = await response.json();
+                    setUserVehicles(data);
+                } catch (err) {
+                    setError(err.message);
+                }
+            };
+
+            const timeoutId = setTimeout(() => {
+                fetchUserVehicles();
+            }, 1000);
+
+            return () => clearTimeout(timeoutId);
+        }
+    }, [selectedSlot]);
 
     const handlePark = async (e) => {
         e.preventDefault();
+        const user = JSON.parse(localStorage.getItem('user'));
+
+        if (!user) {
+            setError('User not authenticated');
+            return;
+        }
+        
         try {
-            const response = await fetch(`http://localhost:4000/parkinglot/park`, {
+            const response = await fetch(`http://localhost:4000/parking/park`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ slotNumber: selectedSlot, vehicleId: selectedVehicle }),
+                body: JSON.stringify({ slotNo: selectedSlot, vehicleId: selectedVehicle, userId: user.userid, parkingLotId:parkingLot._id}),
             });
             const data = await response.json();
             if (data.error) throw new Error(data.error);
@@ -86,16 +105,17 @@ const ParkingLotDetails = () => {
                 </div>
             </div>
             <div className="w-full lg:w-1/3 p-4 flex flex-col">
-                <div className="overflow-y-auto max-h-48 mb-4">
+                {/* <div className="overflow-y-auto max-h-48 mb-4">
                     <h3 className="text-xl font-bold mb-2">Your Vehicles</h3>
-                    <ul className="list-disc ml-5">
+                    {!userVehicles ?  <ul className="list-disc ml-5">
                         {userVehicles.map(vehicle => (
                             <li key={vehicle._id} className={`${vehicle.isParked ? 'text-gray-400' : 'text-black'}`}>
                                 {vehicle.carModel} ({vehicle.plateNumber})
                             </li>
                         ))}
-                    </ul>
-                </div>
+                    </ul> : <p>Please select Slot</p>} 
+                    
+                </div> */}
                 <form onSubmit={handlePark} className="mt-4">
                     <h3 className="text-xl font-bold mb-2">Park Your Vehicle</h3>
                     <div className="mb-4">

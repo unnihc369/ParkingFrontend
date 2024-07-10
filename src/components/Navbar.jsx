@@ -23,7 +23,10 @@ const Navbar = () => {
                                 <Link to="/parkinglot" className="hover:text-gray-300 px-3 py-1">
                                     Park a Vehicle
                                 </Link>
-                                <span>{user.email}</span>
+                                <Link to="/parked" className="hover:text-gray-300 px-3 py-1">
+                                    Parked
+                                </Link>
+                                <Link to='/user'><span>{user.email}</span></Link>
                                 <button
                                     onClick={handleClick}
                                     className="bg-red-600 hover:bg-red-700 px-3 py-1 rounded text-white"
